@@ -1,0 +1,192 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Date-Based Carousel</title>
+  <style>
+    body { font-family: sans-serif; display: flex; justify-content: center; margin-top: 50px; }
+    .carousel { display: flex; gap: 10px; }
+    .carousel img { width: 200px; height: 150px; object-fit: cover; border: 2px solid #ccc; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <div class="carousel">
+    <img id="slot1" src="https://via.placeholder.com/200x150?text=Image+1" alt="Slot 1">
+    <img id="slot2" src="https://via.placeholder.com/200x150?text=Image+2" alt="Slot 2">
+    <img id="slot3" src="https://via.placeholder.com/200x150?text=Image+3" alt="Slot 3">
+    <img id="slot4" src="https://via.placeholder.com/200x150?text=Image+4" alt="Slot 4">
+  </div>
+
+  <script>
+    const now = new Date();
+    const pstOffset = 8 * 60; // PST is UTC-8
+    const localOffset = now.getTimezoneOffset();
+    const pstNow = new Date(now.getTime() + (localOffset - pstOffset) * 60000);
+
+    const slot1Date = new Date();
+    slot1Date.setDate(slot1Date.getDate() + 1);
+    slot1Date.setHours(0, 0, 0, 0);
+
+    const slot2Date = new Date();
+    slot2Date.setDate(slot2Date.getDate() + 7);
+    slot2Date.setHours(0, 0, 0, 0);
+
+    const slot3Date = new Date("2025-07-23T00:00:00-08:00"); // Midnight PST
+
+    if (pstNow >= slot1Date) {
+      document.getElementById("slot1").src = "https://via.placeholder.com/200x150/ff0000?text=Updated+1";
+    }
+
+    if (pstNow >= slot2Date) {
+      document.getElementById("slot2").src = "https://via.placeholder.com/200x150/00ff00?text=Updated+2";
+    }
+
+    if (pstNow >= slot3Date) {
+      document.getElementById("slot3").src = "https://via.placeholder.com/200x150/0000ff?text=Updated+3";
+    }
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Rallies Carousel</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+    }
+
+    h1 {
+      font-size: 32px;
+      letter-spacing: 1px;
+      font-weight: 500;
+      margin-bottom: 30px;
+    }
+
+    .carousel {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .slot {
+      width: 280px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+      background-color: #fdfdfd;
+    }
+
+    .slot img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+
+    .event {
+      display: none;
+      margin-top: 15px;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .event-title {
+      color: blue;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .event strong {
+      font-weight: bold;
+    }
+
+    .event a {
+      display: inline-block;
+      margin-top: 8px;
+      font-weight: bold;
+      text-decoration: underline;
+      color: black;
+    }
+  </style>
+</head>
+<body>
+  <h1>RALLIES</h1>
+  <div class="carousel">
+    <div class="slot">
+      <!-- <img id="slot1-img" src="https://via.placeholder.com/280x150?text=Image+1" alt="Slot 1"> -->
+      <div id="slot1-event" class="event">
+        <div class="event-title">Take Back America Rally</div>
+        <div><strong>When:</strong> Saturday, July 5, 2 - 4 pm</div>
+        <div><strong>Where:</strong> Southcenter Pkwy & Minkler Blvd, Outside IHOP (17250 Southcenter Pkwy, Tukwila)</div>
+        <a href="https://mobilize.us/s/yHFVZw">RSVP HERE</a>
+      </div>
+    </div>
+
+    <div class="slot">
+      <!-- <img id="slot2-img" src="https://via.placeholder.com/280x150?text=Image+2" alt="Slot 2"> -->
+      <div id="slot2-event" class="event">
+        <div class="event-title">Protest to Stop Ice Kiddnappings</div>
+        <div><strong>When:</strong> Friday, July 11, 9 - 10:30 am</div>
+        <div><strong>Where:</strong> Department of Homeland Security, 12500 Tukwila International Blvd, Tukwila, WA 98168</div>
+        <a href="https://mobilize.us/s/u16SRl">RSVP HERE</a>
+      </div>
+    </div>
+
+    <div class="slot">
+      <!-- <img id="slot3-img" src="https://via.placeholder.com/280x150?text=Image+3" alt="Slot 3"> -->
+      <div id="slot3-event" class="event">
+        <div class="event-title">Protest Trump & GOP's Assault on Social Security, Medicaid & Medicare</div>
+        <div><strong>When:</strong> Monday, July 21, noon - 2 pm</div>
+        <div><strong>Where:</strong> Kent Social Security Administration Building, 321 Ramsay Way, Kent WA 98032</div>
+        <a href="https://mobilize.us/s/nRyAEF">RSVP HERE</a>
+      </div>
+    </div>
+
+    <div class="slot">
+      <img id="slot4-img" src="https://via.placeholder.com/280x150?text=Image+4" alt="Slot 4">
+    </div>
+  </div>
+
+  <script>
+    const now = new Date();
+    const pstOffset = 8 * 60;
+    const localOffset = now.getTimezoneOffset();
+    const pstNow = new Date(now.getTime() + (localOffset - pstOffset) * 60000);
+
+    const slot1Date = new Date();
+    slot1Date.setDate(slot1Date.getDate() + 1);
+    slot1Date.setHours(0, 0, 0, 0);
+
+    const slot2Date = new Date();
+    slot2Date.setDate(slot2Date.getDate() + 7);
+    slot2Date.setHours(0, 0, 0, 0);
+
+    const slot3Date = new Date("2025-07-23T00:00:00-08:00");
+
+    if (pstNow >= slot1Date) {
+      document.getElementById("slot1-img").src = "https://via.placeholder.com/280x150/ffcccc?text=Event+1+Live";
+      document.getElementById("slot1-event").style.display = "block";
+    }
+
+    if (pstNow >= slot2Date) {
+      document.getElementById("slot2-img").src = "https://via.placeholder.com/280x150/ccffcc?text=Event+2+Live";
+      document.getElementById("slot2-event").style.display = "block";
+    }
+
+    if (pstNow >= slot3Date) {
+      document.getElementById("slot3-img").src = "https://via.placeholder.com/280x150/ccccff?text=Event+3+Live";
+      document.getElementById("slot3-event").style.display = "block";
+    }
+  </script>
+</body>
+</html>
