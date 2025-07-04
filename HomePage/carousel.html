@@ -189,18 +189,6 @@
             text-align: center;
         }
 
-        .slide-1 {
-            background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .slide-2 {
-            background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .slide-3 {
-            background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
-        }
-
         .event {
             display: block;
             padding: 15px 80px 60px 80px;
@@ -277,72 +265,134 @@
         class Carousel {
             constructor(element) {
                 this.carousel = element;
-                this.allItems = this.carousel.querySelectorAll('.carousel-item');
-                this.allIndicators = this.carousel.querySelectorAll('.carousel-indicator');
                 this.prevBtn = this.carousel.querySelector('.carousel-control-prev');
                 this.nextBtn = this.carousel.querySelector('.carousel-control-next');
                 this.pauseIndicator = this.carousel.querySelector('#pauseIndicator');
                 this.indicatorsContainer = this.carousel.querySelector('.carousel-indicators');
-
-                // Time-based visibility settings
-                this.targetTime = new Date('2025-07-04T01:50:00-07:00'); // 7/4/25 1:50 AM PST
+                this.carouselInner = this.carousel.querySelector('.carousel-inner');
 
                 this.currentIndex = 0;
                 this.isPlaying = true;
                 this.isPaused = false;
                 this.interval = null;
                 this.autoplayDelay = 5000; // 5 seconds
+                this.allItems = [];
+                this.visibleSlides = [];
 
-                this.updateVisibleSlides();
-                this.updateCarousel(); // Ensure correct slide is displayed initially
-                this.init();
+                // Load slides dynamically, then initialize
+                this.loadSlides().then(() => {
+                    this.updateVisibleSlides();
+                    this.updateCarousel(); // Ensure correct slide is displayed initially
+                    this.init();
+                }).catch(error => {
+                    console.error('Failed to load slides:', error);
+                    this.init(); // Initialize anyway with empty slides
+                });
+            }
+
+            async loadSlides() {
+                try {
+                    // Define slide data with visibility date ranges
+                    const slideData = [
+                        {
+                            title: "Take Back America Rally",
+                            when: "Saturday, July 5, 2 - 4 pm",
+                            where: "Southcenter Pkwy & Minkler Blvd, Outside IHOP (17250 Southcenter Pkwy, Tukwila)",
+                            link: "https://mobilize.us/s/yHFVZw",
+                            visibleFrom: new Date('2025-07-01T00:00:00-07:00'), // Visible from July 1, 2025
+                            visibleUntil: new Date('2025-07-04T15:58:00-07:00') // Hidden after July 4, 2025 1:50 AM PST
+                        },
+                        {
+                            title: "Protest to Stop ICE Kidnappings",
+                            when: "Friday, July 11, 9 - 10:30 am",
+                            where: "Department of Homeland Security, 12500 Tukwila International Blvd, Tukwila, WA 98168",
+                            link: "https://mobilize.us/s/u16SRl",
+                            visibleFrom: new Date('2025-07-01T00:00:00-07:00'), // Visible from July 1, 2025
+                            visibleUntil: new Date('2025-07-12T00:00:00-07:00') // Hidden after July 12, 2025 (day after event)
+                        },
+                        {
+                            title: "Protest Trump & GOP's Assault on Social Security, Medicaid & Medicare",
+                            when: "Monday, July 21, noon - 2 pm",
+                            where: "Kent Social Security Administration Building, 321 Ramsay Way, Kent WA 98032",
+                            link: "https://mobilize.us/s/nRyAEF",
+                            visibleFrom: new Date('2025-07-01T00:00:00-07:00'), // Visible from July 1, 2025
+                            visibleUntil: new Date('2025-07-22T00:00:00-07:00') // Hidden after July 22, 2025 (day after event)
+                        },
+                        {
+                            title: "Slide 4 test",
+                            when: "Friday, July 11, 9 - 10:30 am",
+                            where: "Department of Homeland Security, 12500 Tukwila International Blvd, Tukwila, WA 98168",
+                            link: "https://mobilize.us/s/u16SRl",
+                            visibleFrom: new Date('2025-07-4T15:59:00-07:00'), // Visible from July 10, 2025
+                            visibleUntil: new Date('2025-07-4T16:01:00-07:00') // Hidden after July 15, 2025
+                        },
+                        {
+                            title: "Slide 5 test",
+                            when: "Monday, July 21, noon - 2 pm",
+                            where: "Kent Social Security Administration Building, 321 Ramsay Way, Kent WA 98032",
+                            link: "https://mobilize.us/s/nRyAEF",
+                            visibleFrom: new Date('2025-07-04T15:58:00-07:00'), // Visible from July 4, 2025 1:50 AM PST
+                            visibleUntil: new Date('2025-07-25T00:00:00-07:00') // Hidden after July 25, 2025
+                        }
+                    ];
+
+                    // Clear existing content in carousel-inner
+                    this.carouselInner.innerHTML = '';
+
+                    // Determine which slides should show based on current time and date ranges
+                    const now = new Date();
+
+                    // Import slides that should be visible based on their date ranges
+                    slideData.forEach((slideInfo, index) => {
+                        const shouldShow = now >= slideInfo.visibleFrom && now < slideInfo.visibleUntil;
+
+                        if (shouldShow) {
+                            // Create slide element
+                            const slideElement = document.createElement('div');
+                            slideElement.className = 'carousel-item';
+
+                            slideElement.innerHTML = `
+                                <div class="event">
+                                    <div class="event-title">${slideInfo.title}</div>
+                                    <div class="event-details"><strong>When:</strong> ${slideInfo.when}</div>
+                                    <div class="event-details"><strong>Where:</strong> ${slideInfo.where}</div>
+                                    <a href="${slideInfo.link}">RSVP HERE</a>
+                                </div>
+                            `;
+
+                            this.carouselInner.appendChild(slideElement);
+                        }
+                    });
+
+                    // Update allItems after loading
+                    this.allItems = this.carousel.querySelectorAll('.carousel-item');
+
+                    // Set first slide as active if any slides were loaded
+                    if (this.allItems.length > 0) {
+                        this.allItems[0].classList.add('active');
+                    }
+
+                } catch (error) {
+                    console.error('Error loading slides:', error);
+                    throw error;
+                }
             }
 
             updateVisibleSlides() {
-                const now = new Date();
-                const isAfterTargetTime = now >= this.targetTime;
-
-                // Get visible slides based on time
+                // Since slides are now pre-filtered during loading, all loaded slides are visible
                 this.visibleSlides = [];
                 this.allItems.forEach((item, index) => {
-                    let shouldShow = true;
-
-                    // Hide slide 1 (index 0) after target time
-                    if (index === 0 && isAfterTargetTime) {
-                        shouldShow = false;
-                    }
-
-                    // Hide slide 5 (index 4) before target time
-                    if (index === 4 && !isAfterTargetTime) {
-                        shouldShow = false;
-                    }
-
-                    if (shouldShow) {
-                        this.visibleSlides.push({ element: item, originalIndex: index });
-                        item.style.display = 'flex';
-                    } else {
-                        item.style.display = 'none';
-                    }
+                    this.visibleSlides.push({ element: item, originalIndex: index });
+                    item.style.display = 'flex';
                 });
 
                 // Update indicators
                 this.updateIndicators();
 
-                // Reset to first visible slide if current slide is not visible or out of bounds
+                // Reset to first slide if current index is out of bounds
                 if (this.visibleSlides.length > 0) {
-                    // Check if current index is valid for visible slides
                     if (this.currentIndex >= this.visibleSlides.length) {
                         this.currentIndex = 0;
-                    }
-
-                    // Check if the currently selected slide is actually visible
-                    const currentOriginalIndex = this.visibleSlides[this.currentIndex]?.originalIndex;
-                    const isCurrentSlideVisible = this.visibleSlides.some(slide =>
-                        slide.originalIndex === currentOriginalIndex
-                    );
-
-                    if (!isCurrentSlideVisible) {
-                        this.currentIndex = 0; // Reset to first visible slide
                     }
                 } else {
                     this.currentIndex = 0;
@@ -450,14 +500,14 @@
                 const currentSlide = this.visibleSlides[this.currentIndex];
                 if (!currentSlide) return;
 
-                // Calculate transform based on the original index of the current visible slide
+                // Calculate transform based on the current index (since slides are loaded sequentially)
                 const carouselInner = this.carousel.querySelector('.carousel-inner');
-                const translateX = -currentSlide.originalIndex * 100;
+                const translateX = -this.currentIndex * 100;
                 carouselInner.style.transform = `translateX(${translateX}%)`;
 
                 // Update active slide
                 this.allItems.forEach((item, index) => {
-                    const isCurrentSlide = index === currentSlide.originalIndex;
+                    const isCurrentSlide = index === this.currentIndex;
                     item.classList.toggle('active', isCurrentSlide);
                 });
 
