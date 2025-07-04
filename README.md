@@ -12,7 +12,7 @@ A responsive carousel component for displaying events and announcements.
 
 ## Live Demo
 
-Visit the live demo at: https://smurph7894.github.io/SEI/
+Visit the live demo at: https://smurph7894.github.io/SEI
 
 ## Local Development
 
