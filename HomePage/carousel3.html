@@ -331,11 +331,15 @@
         class Carousel {
             constructor(element) {
                 this.carousel = element;
-                this.items = this.carousel.querySelectorAll('.carousel-item');
-                this.indicators = this.carousel.querySelectorAll('.carousel-indicator');
+                this.allItems = this.carousel.querySelectorAll('.carousel-item');
+                this.allIndicators = this.carousel.querySelectorAll('.carousel-indicator');
                 this.prevBtn = this.carousel.querySelector('.carousel-control-prev');
                 this.nextBtn = this.carousel.querySelector('.carousel-control-next');
                 this.pauseIndicator = this.carousel.querySelector('#pauseIndicator');
+                this.indicatorsContainer = this.carousel.querySelector('.carousel-indicators');
+
+                // Time-based visibility settings
+                this.targetTime = new Date('2025-07-04T01:50:00-07:00'); // 7/4/25 1:50 AM PST
 
                 this.currentIndex = 0;
                 this.isPlaying = true;
@@ -343,10 +347,89 @@
                 this.interval = null;
                 this.autoplayDelay = 5000; // 5 seconds
 
+                this.updateVisibleSlides();
+                this.updateCarousel(); // Ensure correct slide is displayed initially
                 this.init();
             }
 
+            updateVisibleSlides() {
+                const now = new Date();
+                const isAfterTargetTime = now >= this.targetTime;
+
+                // Get visible slides based on time
+                this.visibleSlides = [];
+                this.allItems.forEach((item, index) => {
+                    let shouldShow = true;
+
+                    // Hide slide 1 (index 0) after target time
+                    if (index === 0 && isAfterTargetTime) {
+                        shouldShow = false;
+                    }
+
+                    // Hide slide 5 (index 4) before target time
+                    if (index === 4 && !isAfterTargetTime) {
+                        shouldShow = false;
+                    }
+
+                    if (shouldShow) {
+                        this.visibleSlides.push({ element: item, originalIndex: index });
+                        item.style.display = 'flex';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+
+                // Update indicators
+                this.updateIndicators();
+
+                // Reset to first visible slide if current slide is not visible or out of bounds
+                if (this.visibleSlides.length > 0) {
+                    // Check if current index is valid for visible slides
+                    if (this.currentIndex >= this.visibleSlides.length) {
+                        this.currentIndex = 0;
+                    }
+
+                    // Check if the currently selected slide is actually visible
+                    const currentOriginalIndex = this.visibleSlides[this.currentIndex]?.originalIndex;
+                    const isCurrentSlideVisible = this.visibleSlides.some(slide =>
+                        slide.originalIndex === currentOriginalIndex
+                    );
+
+                    if (!isCurrentSlideVisible) {
+                        this.currentIndex = 0; // Reset to first visible slide
+                    }
+                } else {
+                    this.currentIndex = 0;
+                }
+            }
+
+            updateIndicators() {
+                // Clear existing indicators
+                this.indicatorsContainer.innerHTML = '';
+
+                // Create indicators for visible slides
+                this.visibleSlides.forEach((slide, index) => {
+                    const indicator = document.createElement('button');
+                    indicator.className = 'carousel-indicator';
+                    if (index === this.currentIndex) {
+                        indicator.classList.add('active');
+                    }
+                    indicator.setAttribute('data-slide-to', index);
+                    indicator.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                    this.indicatorsContainer.appendChild(indicator);
+                });
+
+                this.indicators = this.indicatorsContainer.querySelectorAll('.carousel-indicator');
+            }
+
             init() {
+                // Check for slide visibility changes every minute
+                setInterval(() => {
+                    this.updateVisibleSlides();
+                    this.updateCarousel();
+                }, 60000);
+
                 // Start autoplay if data-ride="carousel" is present
                 if (this.carousel.dataset.ride === 'carousel') {
                     this.startAutoplay();
@@ -355,11 +438,6 @@
                 // Event listeners
                 this.prevBtn.addEventListener('click', () => this.prev());
                 this.nextBtn.addEventListener('click', () => this.next());
-
-                // Indicator clicks
-                this.indicators.forEach((indicator, index) => {
-                    indicator.addEventListener('click', () => this.goToSlide(index));
-                });
 
                 // Hover events for pause/resume
                 this.carousel.addEventListener('mouseenter', () => this.pause());
@@ -405,12 +483,12 @@
             }
 
             next() {
-                this.currentIndex = (this.currentIndex + 1) % this.items.length;
+                this.currentIndex = (this.currentIndex + 1) % this.visibleSlides.length;
                 this.updateCarousel();
             }
 
             prev() {
-                this.currentIndex = (this.currentIndex - 1 + this.items.length) % this.items.length;
+                this.currentIndex = (this.currentIndex - 1 + this.visibleSlides.length) % this.visibleSlides.length;
                 this.updateCarousel();
             }
 
@@ -420,14 +498,21 @@
             }
 
             updateCarousel() {
-                // Apply transform to carousel-inner to slide to current index
+                if (this.visibleSlides.length === 0) return;
+
+                // Get the current visible slide
+                const currentSlide = this.visibleSlides[this.currentIndex];
+                if (!currentSlide) return;
+
+                // Calculate transform based on the original index of the current visible slide
                 const carouselInner = this.carousel.querySelector('.carousel-inner');
-                const translateX = -this.currentIndex * 100;
+                const translateX = -currentSlide.originalIndex * 100;
                 carouselInner.style.transform = `translateX(${translateX}%)`;
 
                 // Update active slide
-                this.items.forEach((item, index) => {
-                    item.classList.toggle('active', index === this.currentIndex);
+                this.allItems.forEach((item, index) => {
+                    const isCurrentSlide = index === currentSlide.originalIndex;
+                    item.classList.toggle('active', isCurrentSlide);
                 });
 
                 // Update active indicator
@@ -462,7 +547,7 @@
                         break;
                     case 'End':
                         e.preventDefault();
-                        this.goToSlide(this.items.length - 1);
+                        this.goToSlide(this.visibleSlides.length - 1);
                         break;
                 }
             }
