@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- ON UPDATE
+    - Update the number of indicators dependent on how many slides are visible 
+-->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bootstrap Style Carousel</title>
+    <title>Carousel</title>
     <style>
         * {
             margin: 0;
@@ -31,7 +35,7 @@
         .carousel {
             position: relative;
             width: 100%;
-            height: 400px;
+            height: 300px;
             overflow: hidden;
         }
 
@@ -136,6 +140,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
         .carousel-indicator.active {
@@ -195,6 +200,47 @@
         .slide-3 {
             background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
         }
+
+        .event {
+            display: block;
+            padding: 15px 80px 60px 80px;
+            /* top right bottom left - extra space for buttons and indicators */
+            text-align: center;
+            background: white;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            min-height: 200px;
+            /* ensure minimum height for content */
+        }
+
+        .event-title {
+            color: blue;
+            font-size: 33px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-left: -65px;
+            margin-right: -65px;
+        }
+
+        .event-details {
+            font-size: 18px;
+            font-weight: bold;
+            /* margin-bottom: 15px; */
+        }
+
+        .event strong {
+            font-weight: bold;
+        }
+
+        .event a {
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 700;
+            text-decoration: underline;
+            color: black;
+            font-size: 20px;
+        }
     </style>
 </head>
 
@@ -204,29 +250,57 @@
             <div class="carousel-inner">
                 <!-- Slide 1 -->
                 <div class="carousel-item active">
-                    <img src="Images/image_placeholder.jpg" alt="Slide 1">
-                    <div class="carousel-caption">
-                        <h3>First Slide</h3>
-                        <p>This is the first slide of our carousel with automatic rotation.</p>
+                    <div class="event">
+                        <div class="event-title">Take Back America Rally</div>
+                        <div class="event-details"><strong>When:</strong> Saturday, July 5, 2 - 4 pm</div>
+                        <div class="event-details"><strong>Where:</strong> Southcenter Pkwy & Minkler Blvd, Outside IHOP
+                            (17250 Southcenter Pkwy, Tukwila)</div>
+                        <a href="https://mobilize.us/s/yHFVZw">RSVP HERE</a>
                     </div>
                 </div>
 
                 <!-- Slide 2 -->
                 <div class="carousel-item">
-                    <img src="Images/image_placeholder2.jpg" alt="Slide 2">
-                    <div class="carousel-caption">
-                        <h3>Second Slide</h3>
-                        <p>This is the second slide with pause on hover functionality.</p>
+                    <div class="event">
+                        <div class="event-title">Protest to Stop ICE Kidnappings</div>
+                        <div class="event-details"><strong>When:</strong> Friday, July 11, 9 - 10:30 am</div>
+                        <div class="event-details"><strong>Where:</strong> Department of Homeland Security, 12500
+                            Tukwila International Blvd, Tukwila, WA 98168</div>
+                        <a href="https://mobilize.us/s/u16SRl">RSVP HERE</a>
                     </div>
                 </div>
 
                 <!-- Slide 3 -->
                 <div class="carousel-item">
-                    <div class="slide-content slide-3">
-                        <div>
-                            <h3>Third Slide</h3>
-                            <p>This slide demonstrates keyboard navigation support.</p>
+                    <div class="event">
+                        <div class="event-title">Protest Trump & GOP's Assault on Social Security, Medicaid & Medicare
                         </div>
+                        <div class="event-details"><strong>When:</strong> Monday, July 21, noon - 2 pm</div>
+                        <div class="event-details"><strong>Where:</strong> Kent Social Security Administration Building,
+                            321 Ramsay Way, Kent WA 98032</div>
+                        <a href="https://mobilize.us/s/nRyAEF">RSVP HERE</a>
+                    </div>
+                </div>
+
+                <!-- Slide 2 -->
+                <div class="carousel-item">
+                    <div class="event">
+                        <div class="event-title">Slide 4 test</div>
+                        <div class="event-details"><strong>When:</strong> Friday, July 11, 9 - 10:30 am</div>
+                        <div class="event-details"><strong>Where:</strong> Department of Homeland Security, 12500
+                            Tukwila International Blvd, Tukwila, WA 98168</div>
+                        <a href="https://mobilize.us/s/u16SRl">RSVP HERE</a>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="carousel-item">
+                    <div class="event">
+                        <div class="event-title">Slide 5 test</div>
+                        <div class="event-details"><strong>When:</strong> Monday, July 21, noon - 2 pm</div>
+                        <div class="event-details"><strong>Where:</strong> Kent Social Security Administration Building,
+                            321 Ramsay Way, Kent WA 98032</div>
+                        <a href="https://mobilize.us/s/nRyAEF">RSVP HERE</a>
                     </div>
                 </div>
             </div>
@@ -254,7 +328,7 @@
     </div>
 
     <script>
-        class BootstrapCarousel {
+        class Carousel {
             constructor(element) {
                 this.carousel = element;
                 this.items = this.carousel.querySelectorAll('.carousel-item');
@@ -398,7 +472,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const carouselElement = document.getElementById('myCarousel');
             if (carouselElement) {
-                new BootstrapCarousel(carouselElement);
+                new Carousel(carouselElement);
             }
         });
 
