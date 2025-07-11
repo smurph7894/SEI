@@ -28,6 +28,62 @@
         .link:hover {
             text-decoration: underline;
         }
+
+        /* Responsive Design */
+        /* Extra Small (phones) ≤ 480px */
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .redirect-message {
+                font-size: 16px;
+            }
+        }
+
+        /* Small (phones/tablets) ≤ 600px */
+        @media (max-width: 600px) {
+            body {
+                padding: 30px 20px;
+            }
+
+            .redirect-message {
+                font-size: 17px;
+            }
+        }
+
+        /* Medium (tablets) 601px–900px */
+        @media (min-width: 601px) and (max-width: 900px) {
+            body {
+                padding: 40px 30px;
+            }
+
+            .redirect-message {
+                font-size: 18px;
+            }
+        }
+
+        /* Large (laptops) 901px–1200px */
+        @media (min-width: 901px) and (max-width: 1200px) {
+            body {
+                padding: 45px 40px;
+            }
+
+            .redirect-message {
+                font-size: 19px;
+            }
+        }
+
+        /* Extra Large (desktops) ≥ 1201px */
+        @media (min-width: 1201px) {
+            body {
+                padding: 50px;
+            }
+
+            .redirect-message {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
