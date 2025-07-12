@@ -1,9 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<!-- ON UPDATE
+    - Update the number of indicators dependent on how many slides are visible 
+-->
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Carousel</title>
     <style>
         * {
@@ -15,11 +19,9 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #ffffff;
-            padding: 10px;
-            overflow-x: hidden;
+            padding: 20px;
         }
 
-        /* Responsive aspect ratio wrapper */
         .carousel-container {
             max-width: 800px;
             margin: 0 auto;
@@ -28,21 +30,13 @@
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            /* Aspect ratio 16:9 - adjust if needed */
-            aspect-ratio: 16 / 9;
-            /* For browsers not supporting aspect-ratio */
-            height: auto;
-            min-height: 200px;
         }
 
         .carousel {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: 300px;
             overflow: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
         .carousel-inner {
@@ -63,6 +57,10 @@
             justify-content: center;
         }
 
+        .carousel-item.active {
+            /* Active state handled by transform on carousel-inner */
+        }
+
         .carousel-item img {
             width: 100%;
             height: 100%;
@@ -79,7 +77,6 @@
             background: rgba(0, 0, 0, 0.5);
             padding: 15px;
             border-radius: 5px;
-            font-size: clamp(0.8rem, 1vw, 1.5rem);
         }
 
         .carousel-caption h3 {
@@ -88,8 +85,8 @@
         }
 
         .carousel-caption p {
-            margin: 0;
             font-size: 1rem;
+            margin: 0;
         }
 
         /* Navigation Controls */
@@ -180,8 +177,98 @@
             outline-offset: 2px;
         }
 
-        /* Responsive tweaks */
-        @media (max-width: 600px) {
+        /* for slides without images */
+        .slide-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            text-align: center;
+        }
+
+        .event {
+            display: block;
+            padding: 15px 80px 60px 80px;
+            /* top right bottom left - extra space for buttons and indicators */
+            text-align: center;
+            background: white;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #333;
+            min-height: 200px;
+            /* ensure minimum height for content */
+        }
+
+        .event-title {
+            color: blue;
+            font-size: 33px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            margin-left: -65px;
+            margin-right: -65px;
+        }
+
+        .event-details {
+            font-size: 18px;
+            font-weight: bold;
+            /* margin-bottom: 15px; */
+        }
+
+        .event strong {
+            font-weight: bold;
+        }
+
+        .event a {
+            display: inline-block;
+            margin-top: 10px;
+            font-weight: 700;
+            text-decoration: underline;
+            color: black;
+            font-size: 20px;
+        }
+
+        /* Responsive Design */
+        /* Extra Small (phones) ≤ 480px */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px;
+            }
+
+            .carousel-container {
+                max-width: 100%;
+                margin: 0;
+            }
+
+            .carousel {
+                height: 220px;
+            }
+
+            .event {
+                padding: 10px 10px 30px 10px;
+                font-size: 12px;
+                min-height: auto;
+            }
+
+            .event-title {
+                font-size: 16px;
+                margin-left: 0;
+                margin-right: 0;
+                /* margin-bottom: 8px; */
+            }
+
+            .event-details {
+                font-size: 13px;
+                margin-bottom: 8px;
+            }
+
+            .event a {
+                font-size: 14px;
+                margin-top: 8px;
+            }
+
             .carousel-control {
                 width: 35px;
                 height: 35px;
@@ -206,9 +293,322 @@
                 gap: 6px;
             }
 
-            .carousel-caption {
-                padding: 8px;
+            .carousel-caption h3 {
+                font-size: 1rem;
+            }
+
+            .carousel-caption p {
+                font-size: 0.8rem;
+            }
+
+            .carousel-paused {
+                top: 8px;
+                right: 8px;
+                font-size: 10px;
+                padding: 3px 6px;
+            }
+        }
+
+        /* Small (phones/tablets) ≤ 600px */
+        @media (max-width: 600px) {
+            body {
+                padding: 15px;
+            }
+
+            .carousel-container {
+                max-width: 100%;
+            }
+
+            .carousel {
+                height: 280px;
+            }
+
+            .event {
+                padding: 15px 25px 55px 25px;
+                font-size: 13px;
+                min-height: 190px;
+            }
+
+            .event-title {
+                font-size: 22px;
+                margin-left: -15px;
+                margin-right: -15px;
+                margin-bottom: 8px;
+            }
+
+            .event-details {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+
+            .event a {
+                font-size: 16px;
+                margin-top: 8px;
+            }
+
+            .carousel-control {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
+
+            .carousel-control-prev {
+                left: 10px;
+            }
+
+            .carousel-control-next {
+                right: 10px;
+            }
+
+            .carousel-indicator {
+                width: 10px;
+                height: 10px;
+            }
+
+            .carousel-indicators {
+                bottom: 10px;
+                gap: 8px;
+            }
+
+            .carousel-caption h3 {
+                font-size: 1.2rem;
+            }
+
+            .carousel-caption p {
                 font-size: 0.9rem;
+            }
+
+            .carousel-paused {
+                top: 10px;
+                right: 10px;
+                font-size: 11px;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Medium (tablets) 601px–900px */
+        @media (min-width: 601px) and (max-width: 900px) {
+            body {
+                padding: 20px;
+            }
+
+            .carousel-container {
+                max-width: 700px;
+            }
+
+            .carousel {
+                height: 320px;
+            }
+
+            .event {
+                padding: 20px 50px 60px 50px;
+                font-size: 14px;
+                min-height: 200px;
+            }
+
+            .event-title {
+                font-size: 28px;
+                margin-left: -40px;
+                margin-right: -40px;
+                margin-bottom: 10px;
+            }
+
+            .event-details {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
+
+            .event a {
+                font-size: 18px;
+                margin-top: 10px;
+            }
+
+            .carousel-control {
+                width: 45px;
+                height: 45px;
+                font-size: 17px;
+            }
+
+            .carousel-control-prev {
+                left: 12px;
+            }
+
+            .carousel-control-next {
+                right: 12px;
+            }
+
+            .carousel-indicator {
+                width: 11px;
+                height: 11px;
+            }
+
+            .carousel-indicators {
+                bottom: 12px;
+                gap: 9px;
+            }
+
+            .carousel-caption h3 {
+                font-size: 1.3rem;
+            }
+
+            .carousel-caption p {
+                font-size: 0.95rem;
+            }
+
+            .carousel-paused {
+                top: 12px;
+                right: 12px;
+                font-size: 11px;
+            }
+        }
+
+        /* Large (laptops) 901px–1200px */
+        @media (min-width: 901px) and (max-width: 1200px) {
+            body {
+                padding: 20px;
+            }
+
+            .carousel-container {
+                max-width: 750px;
+            }
+
+            .carousel {
+                height: 300px;
+            }
+
+            .event {
+                padding: 15px 70px 60px 70px;
+                font-size: 14px;
+                min-height: 200px;
+            }
+
+            .event-title {
+                font-size: 31px;
+                margin-left: -60px;
+                margin-right: -60px;
+                margin-bottom: 10px;
+            }
+
+            .event-details {
+                font-size: 17px;
+            }
+
+            .event a {
+                font-size: 19px;
+                margin-top: 10px;
+            }
+
+            .carousel-control {
+                width: 48px;
+                height: 48px;
+                font-size: 17px;
+            }
+
+            .carousel-control-prev {
+                left: 14px;
+            }
+
+            .carousel-control-next {
+                right: 14px;
+            }
+
+            .carousel-indicator {
+                width: 12px;
+                height: 12px;
+            }
+
+            .carousel-indicators {
+                bottom: 14px;
+                gap: 10px;
+            }
+
+            .carousel-caption h3 {
+                font-size: 1.4rem;
+            }
+
+            .carousel-caption p {
+                font-size: 0.98rem;
+            }
+
+            .carousel-paused {
+                top: 14px;
+                right: 14px;
+                font-size: 12px;
+            }
+        }
+
+        /* Extra Large (desktops) ≥ 1201px */
+        @media (min-width: 1201px) {
+            body {
+                padding: 20px;
+            }
+
+            .carousel-container {
+                max-width: 800px;
+            }
+
+            .carousel {
+                height: 300px;
+            }
+
+            .event {
+                padding: 15px 80px 60px 80px;
+                font-size: 14px;
+                min-height: 200px;
+            }
+
+            .event-title {
+                font-size: 33px;
+                margin-left: -65px;
+                margin-right: -65px;
+                margin-bottom: 10px;
+            }
+
+            .event-details {
+                font-size: 18px;
+            }
+
+            .event a {
+                font-size: 20px;
+                margin-top: 10px;
+            }
+
+            .carousel-control {
+                width: 50px;
+                height: 50px;
+                font-size: 18px;
+            }
+
+            .carousel-control-prev {
+                left: 15px;
+            }
+
+            .carousel-control-next {
+                right: 15px;
+            }
+
+            .carousel-indicator {
+                width: 12px;
+                height: 12px;
+            }
+
+            .carousel-indicators {
+                bottom: 15px;
+                gap: 10px;
+            }
+
+            .carousel-caption h3 {
+                font-size: 1.5rem;
+            }
+
+            .carousel-caption p {
+                font-size: 1rem;
+            }
+
+            .carousel-paused {
+                top: 15px;
+                right: 15px;
+                font-size: 12px;
             }
         }
     </style>
@@ -218,18 +618,24 @@
     <div class="carousel-container">
         <div class="carousel" id="myCarousel" data-ride="carousel">
             <div class="carousel-inner">
-                <!-- Slides inserted dynamically -->
+
             </div>
 
             <!-- Navigation Controls -->
             <button class="carousel-control carousel-control-prev" type="button" data-target="#myCarousel"
-                data-slide="prev" aria-label="Previous slide">&#8249;</button>
+                data-slide="prev" aria-label="Previous slide">
+                &#8249;
+            </button>
             <button class="carousel-control carousel-control-next" type="button" data-target="#myCarousel"
-                data-slide="next" aria-label="Next slide">&#8250;</button>
+                data-slide="next" aria-label="Next slide">
+                &#8250;
+            </button>
 
             <!-- Indicators -->
             <div class="carousel-indicators">
-                <!-- Indicators inserted dynamically -->
+                <button class="carousel-indicator active" data-slide-to="0" aria-label="Go to slide 1"></button>
+                <button class="carousel-indicator" data-slide-to="1" aria-label="Go to slide 2"></button>
+                <button class="carousel-indicator" data-slide-to="2" aria-label="Go to slide 3"></button>
             </div>
 
             <!-- Pause Indicator -->
@@ -237,7 +643,314 @@
         </div>
     </div>
 
+    <script>
+        class Carousel {
+            constructor(element) {
+                this.carousel = element;
+                this.prevBtn = this.carousel.querySelector('.carousel-control-prev');
+                this.nextBtn = this.carousel.querySelector('.carousel-control-next');
+                this.pauseIndicator = this.carousel.querySelector('#pauseIndicator');
+                this.indicatorsContainer = this.carousel.querySelector('.carousel-indicators');
+                this.carouselInner = this.carousel.querySelector('.carousel-inner');
 
+                this.currentIndex = 0;
+                this.isPlaying = true;
+                this.isPaused = false;
+                this.interval = null;
+                this.autoplayDelay = 5000; // 5 seconds
+                this.allItems = [];
+                this.visibleSlides = [];
+
+                // Load slides dynamically, then initialize
+                this.loadSlides().then(() => {
+                    this.updateVisibleSlides();
+                    this.updateCarousel(); // Ensure correct slide is displayed initially
+                    this.init();
+                }).catch(error => {
+                    console.error('Failed to load slides:', error);
+                    this.init(); // Initialize anyway with empty slides
+                });
+            }
+
+            async loadSlides() {
+                try {
+                    // Define slide data with visibility date ranges
+                    const slideData = [
+                        {
+                            title: "Take Back America Rally",
+                            when: "Saturday, July 5, 2 - 4 pm",
+                            where: "Southcenter Pkwy & Minkler Blvd, Outside IHOP (17250 Southcenter Pkwy, Tukwila)",
+                            link: "https://mobilize.us/s/yHFVZw",
+                            visibleFrom: new Date('2025-07-01T00:00:00-07:00'), // Visible from July 1, 2025
+                            visibleUntil: new Date('2025-07-11T16:47:00-07:00') // Hidden after July 6, 2025 (day after event)
+                        },
+                        {
+                            title: "Protest to Stop ICE Kidnappings",
+                            when: "Friday, July 11, 9 - 10:30 am",
+                            where: "Department of Homeland Security, 12500 Tukwila International Blvd, Tukwila, WA 98168",
+                            link: "https://mobilize.us/s/u16SRl",
+                            visibleFrom: new Date('2025-07-01T00:00:00-07:00'), // Visible from July 1, 2025
+                            visibleUntil: new Date('2025-07-12T00:00:00-07:00') // Hidden after July 12, 2025 (day after event)
+                        },
+                        {
+                            title: "Protest Trump & GOP's Assault on Social Security, Medicaid & Medicare",
+                            when: "Monday, July 21, noon - 2 pm",
+                            where: "Kent Social Security Administration Building, 321 Ramsay Way, Kent WA 98032",
+                            link: "https://mobilize.us/s/nRyAEF",
+                            visibleFrom: new Date('2025-07-01T00:00:00-07:00'), // Visible from July 1, 2025
+                            visibleUntil: new Date('2025-07-22T00:00:00-07:00') // Hidden after July 22, 2025 (day after event)
+                        }
+                    ];
+
+                    // Clear existing content in carousel-inner
+                    this.carouselInner.innerHTML = '';
+
+                    // Determine which slides should show based on current time and date ranges
+                    const now = new Date();
+
+                    // Import slides that should be visible based on their date ranges
+                    slideData.forEach((slideInfo, index) => {
+                        const shouldShow = now >= slideInfo.visibleFrom && now < slideInfo.visibleUntil;
+
+                        if (shouldShow) {
+                            // Create slide element
+                            const slideElement = document.createElement('div');
+                            slideElement.className = 'carousel-item';
+
+                            slideElement.innerHTML = `
+                                <div class="event">
+                                    <div class="event-title">${slideInfo.title}</div>
+                                    <div class="event-details"><strong>When:</strong> ${slideInfo.when}</div>
+                                    <div class="event-details"><strong>Where:</strong> ${slideInfo.where}</div>
+                                    <a href="${slideInfo.link}" target="_blank" rel="noopener noreferrer">RSVP HERE</a>
+                                </div>
+                            `;
+
+                            this.carouselInner.appendChild(slideElement);
+                        }
+                    });
+
+                    // Update allItems after loading
+                    this.allItems = this.carousel.querySelectorAll('.carousel-item');
+
+                    // Set first slide as active if any slides were loaded
+                    if (this.allItems.length > 0) {
+                        this.allItems[0].classList.add('active');
+                    }
+
+                } catch (error) {
+                    console.error('Error loading slides:', error);
+                    throw error;
+                }
+            }
+
+            updateVisibleSlides() {
+                // Since slides are now pre-filtered during loading, all loaded slides are visible
+                this.visibleSlides = [];
+                this.allItems.forEach((item, index) => {
+                    this.visibleSlides.push({ element: item, originalIndex: index });
+                    item.style.display = 'flex';
+                });
+
+                // Update indicators
+                this.updateIndicators();
+
+                // Reset to first slide if current index is out of bounds
+                if (this.visibleSlides.length > 0) {
+                    if (this.currentIndex >= this.visibleSlides.length) {
+                        this.currentIndex = 0;
+                    }
+                } else {
+                    this.currentIndex = 0;
+                }
+            }
+
+            updateIndicators() {
+                // Clear existing indicators
+                this.indicatorsContainer.innerHTML = '';
+
+                // Create indicators for visible slides
+                this.visibleSlides.forEach((slide, index) => {
+                    const indicator = document.createElement('button');
+                    indicator.className = 'carousel-indicator';
+                    if (index === this.currentIndex) {
+                        indicator.classList.add('active');
+                    }
+                    indicator.setAttribute('data-slide-to', index);
+                    indicator.setAttribute('aria-label', `Go to slide ${index + 1}`);
+                    indicator.addEventListener('click', () => this.goToSlide(index));
+                    this.indicatorsContainer.appendChild(indicator);
+                });
+
+                this.indicators = this.indicatorsContainer.querySelectorAll('.carousel-indicator');
+            }
+
+            init() {
+                // Check for slide visibility changes every minute
+                setInterval(() => {
+                    this.updateVisibleSlides();
+                    this.updateCarousel();
+                }, 60000);
+
+                // Start autoplay if data-ride="carousel" is present
+                if (this.carousel.dataset.ride === 'carousel') {
+                    this.startAutoplay();
+                }
+
+                // Event listeners
+                this.prevBtn.addEventListener('click', () => this.prev());
+                this.nextBtn.addEventListener('click', () => this.next());
+
+                // Hover events for pause/resume
+                this.carousel.addEventListener('mouseenter', () => this.pause());
+                this.carousel.addEventListener('mouseleave', () => this.resume());
+
+                // Keyboard navigation
+                this.carousel.addEventListener('keydown', (e) => this.handleKeyboard(e));
+
+                // Make carousel focusable for keyboard navigation
+                this.carousel.setAttribute('tabindex', '0');
+            }
+
+            startAutoplay() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                }
+
+                this.interval = setInterval(() => {
+                    if (!this.isPaused) {
+                        this.next();
+                    }
+                }, this.autoplayDelay);
+
+                this.isPlaying = true;
+            }
+
+            stopAutoplay() {
+                if (this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+                this.isPlaying = false;
+            }
+
+            pause() {
+                this.isPaused = true;
+                this.pauseIndicator.classList.add('show');
+            }
+
+            resume() {
+                this.isPaused = false;
+                this.pauseIndicator.classList.remove('show');
+            }
+
+            next() {
+                this.currentIndex = (this.currentIndex + 1) % this.visibleSlides.length;
+                this.updateCarousel();
+            }
+
+            prev() {
+                this.currentIndex = (this.currentIndex - 1 + this.visibleSlides.length) % this.visibleSlides.length;
+                this.updateCarousel();
+            }
+
+            goToSlide(index) {
+                this.currentIndex = index;
+                this.updateCarousel();
+            }
+
+            updateCarousel() {
+                if (this.visibleSlides.length === 0) return;
+
+                // Get the current visible slide
+                const currentSlide = this.visibleSlides[this.currentIndex];
+                if (!currentSlide) return;
+
+                // Calculate transform based on the current index (since slides are loaded sequentially)
+                const carouselInner = this.carousel.querySelector('.carousel-inner');
+                const translateX = -this.currentIndex * 100;
+                carouselInner.style.transform = `translateX(${translateX}%)`;
+
+                // Update active slide
+                this.allItems.forEach((item, index) => {
+                    const isCurrentSlide = index === this.currentIndex;
+                    item.classList.toggle('active', isCurrentSlide);
+                });
+
+                // Update active indicator
+                this.indicators.forEach((indicator, index) => {
+                    indicator.classList.toggle('active', index === this.currentIndex);
+                });
+            }
+
+            handleKeyboard(e) {
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        this.prev();
+                        break;
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        this.next();
+                        break;
+                    case ' ': // Spacebar
+                        e.preventDefault();
+                        if (this.isPlaying) {
+                            this.stopAutoplay();
+                            this.pause();
+                        } else {
+                            this.startAutoplay();
+                            this.resume();
+                        }
+                        break;
+                    case 'Home':
+                        e.preventDefault();
+                        this.goToSlide(0);
+                        break;
+                    case 'End':
+                        e.preventDefault();
+                        this.goToSlide(this.visibleSlides.length - 1);
+                        break;
+                }
+            }
+        }
+
+        // Initialize carousel when DOM is loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            const carouselElement = document.getElementById('myCarousel');
+            if (carouselElement) {
+                new Carousel(carouselElement);
+            }
+        });
+
+        // Additional utility functions for external control
+        window.carouselAPI = {
+            pause: function () {
+                const carousel = document.getElementById('myCarousel');
+                if (carousel && carousel.carouselInstance) {
+                    carousel.carouselInstance.pause();
+                }
+            },
+            resume: function () {
+                const carousel = document.getElementById('myCarousel');
+                if (carousel && carousel.carouselInstance) {
+                    carousel.carouselInstance.resume();
+                }
+            },
+            next: function () {
+                const carousel = document.getElementById('myCarousel');
+                if (carousel && carousel.carouselInstance) {
+                    carousel.carouselInstance.next();
+                }
+            },
+            prev: function () {
+                const carousel = document.getElementById('myCarousel');
+                if (carousel && carousel.carouselInstance) {
+                    carousel.carouselInstance.prev();
+                }
+            }
+        };
+    </script>
 </body>
 
 </html>
